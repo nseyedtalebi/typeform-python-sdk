@@ -34,18 +34,12 @@ class Response:
         @dataclass_json
         @dataclass(frozen=True)
         class PartialDef:
-            fields: List[FieldDef]
-
-            @dataclass_json
-            @dataclass(frozen=True)
-            class FieldDef:
-                id: str
-                type: str
-                title: str
-                description: str
-
+            id: str
+            type: str
+            title: str
+            description: str
+        
         fields: List[PartialDef]
-
     definition: Definition
 
     @dataclass_json
@@ -60,20 +54,20 @@ class Response:
             title: str
 
         field: Field
-        AnswerType = Enum(
-            "AnswerType",
-            [
-                "choice",
-                "choices",
-                "date",
-                "email",
-                "url",
-                "file_url",
-                "number",
-                "boolean",
-                "text",
-                "payment",
-            ],
+        #TODO: Replace functional Enum constructors with class derived from Enum
+        @dataclass_json
+        @dataclass(frozen=True)
+        class AnswerType(Enum):
+            choice = 'choice'
+            choices = 'choices'
+            date = 'date'
+            email = 'email'
+            url = 'url'
+            file_url = 'file_url'
+            number = 'number'
+            boolean = 'boolean'
+            text = 'text'
+            payment = 'payment'
         )
         type: AnswerType
 
@@ -108,12 +102,14 @@ class Response:
             name: str
 
         payment: Payment
-        calculated: Calculated
-
+        
         @dataclass_json
         @dataclass(frozen=True)
         class Calculated:
             score: float
+        calculated: Calculated
+
+        
 
     answers: List[Answer]
 
@@ -132,12 +128,11 @@ class Response:
 class Form:
     id: str
     title: str
-    language: str
 
     @dataclass_json
     @dataclass(frozen=True)
     class Field:
-        FieldType = Enum(
+        FieldType = dataclass_json(dataclass(Enum(
             "FieldType",
             [
                 "ranking",
@@ -160,7 +155,7 @@ class Form:
                 "yes_no",
                 "phone_number",
             ],
-        )
+        )))
         id: str
         ref: str
         title: str
@@ -534,3 +529,4 @@ class Form:
         typing_emulation_speed: SpeedEnum
 
     cui_settings: CuiSettings
+    language: str = "en"

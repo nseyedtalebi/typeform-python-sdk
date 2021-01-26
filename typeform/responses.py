@@ -30,7 +30,7 @@ class Responses:
             'query': query,
             'fields': fields
         })
-        return Response.from_dict(resp)
+        return Response.from_dict(resp["items"])
 
     def delete(self, uid: str, includedTokens: typing.Union[str, typing.List[str]]) -> str:
         """
