@@ -1,6 +1,6 @@
 import typing
 from .client import Client
-
+from .dataclasses import Form
 
 class Forms:
     """Typeform Forms API client"""
@@ -26,7 +26,8 @@ class Forms:
 
     def get(self, uid: str) -> dict:
         """Retrieves a form by the given form_id. Includes any theme and images attached to the form as references."""
-        return self.__client.request('get', '/forms/%s' % uid)
+        resp = self.__client.request('get', '/forms/%s' % uid)
+        return Form.from_dict(resp)
 
     def list(self, page: int = None, pageSize: int = None, search: str = None, workspaceId: str = None) -> dict:
         """

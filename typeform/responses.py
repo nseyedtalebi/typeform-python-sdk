@@ -1,6 +1,7 @@
 import typing
-from .client import Client
 
+from .client import Client
+from .dataclasses import Response
 
 class Responses:
     """Typeform Responses API client"""
@@ -17,7 +18,7 @@ class Responses:
         """
         Returns form responses and date and time of form landing and submission.
         """
-        return self.__client.request('get', '/forms/%s/responses' % uid, params={
+        resp =  self.__client.request('get', '/forms/%s/responses' % uid, params={
             'page_size': pageSize or None,
             'since': since or None,
             'until': until,
@@ -29,6 +30,7 @@ class Responses:
             'query': query,
             'fields': fields
         })
+        return Response.from_dict(resp)
 
     def delete(self, uid: str, includedTokens: typing.Union[str, typing.List[str]]) -> str:
         """
